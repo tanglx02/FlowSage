@@ -38,22 +38,33 @@
 
 | 依赖 | 版本 | 说明 |
 |---|---|---|
-| Go | 1.25+（以 `go.mod` 为准） | **需要 CGO**，无 gcc 无法编译 |
+| Go | **1.26+**（以 `go.mod` 为准） | **需要 CGO**，无 gcc 无法编译。1.26 是 chromedp 的要求 |
 | C 编译器 | MSYS2 / MinGW-w64 gcc | `mattn/go-sqlite3` 依赖 |
 | Python | 3.10+ | 工具配方（`tools/*.yaml`）用 |
 | Node | 18+ | 跑前端单测 |
+| 浏览器 | Chrome / Edge / 便携版任一 | FlowSage CLI 需要，见 [07-portable-browser.md](docs/dev/07-portable-browser.md) |
 
 零基础重建环境：运行 `scripts\setup-windows.cmd`，细节见 [docs/dev/01-environment.md](docs/dev/01-environment.md)。
 
 ## 常用命令
 
 ```bash
-go build -o cyberstrike-ai.exe ./cmd/server    # 构建（Windows）
-go build -o cyberstrike-ai ./cmd/server        # 构建（Linux/macOS）
+go build -o cyberstrike-ai.exe ./cmd/server    # 构建 Web 控制台（Windows）
+go build -o flowsage.exe ./cmd/flowsage        # 构建 CLI（Windows）
 go test ./internal/...                         # Go 单测
 node --test web/static/js/*.test.cjs           # 前端单测
-run-windows.cmd                                # 启动服务（Windows，自带 PATH 修复）
-run-windows.cmd --http                         # 纯 HTTP 启动（避免自签证书告警）
+run-windows.cmd --http                         # 启动 Web 控制台（纯 HTTP）
+```
+
+FlowSage CLI（浏览器托管与会话接管）：
+
+```bash
+flowsage browser list                                    # 列出可用浏览器
+flowsage browser open <url> --wait-login                 # 启动独立浏览器，登录后自动提取 Cookie
+flowsage browser cookie --url <url> --format header      # 提取 Cookie（text/header/json）
+flowsage browser cookie --export-alertctl <config.toml>  # 写入 alertctl 配置（自动备份）
+flowsage browser status                                  # 查看实例状态
+flowsage browser close                                   # 关闭实例（profile 保留）
 ```
 
 ## 必须知道的坑
@@ -68,7 +79,9 @@ run-windows.cmd --http                         # 纯 HTTP 启动（避免自签�
 
 | 路径 | 职责 |
 |---|---|
-| `cmd/server/` | 服务入口（flag 解析 → 加载配置 → 启动 app） |
+| `cmd/flowsage/` | **FlowSage CLI 入口**（browser 子命令；后续加 traffic / automation） |
+| `internal/browser/` | 浏览器探测、独立实例管理、CDP 会话与 Cookie 提取 |
+| `cmd/server/` | 上游 Web 控制台入口（原样保留） |
 | `internal/app/app.go` | **总装点**：初始化 DB/认证/MCP/工具/Agent 并注册全部路由。初始化顺序敏感 |
 | `internal/handler/` | HTTP 层，按业务拆分；新增 API 主要在这里 |
 | `internal/agent/`、`internal/multiagent/` | 单智能体 / Eino ADK 多智能体编排 |

@@ -70,3 +70,5 @@ desktop.ini
 
 # FlowSage runtime artifacts
 /browser/
+/flowsage
+/flowsage.exe

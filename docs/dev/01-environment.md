@@ -7,7 +7,7 @@
 
 | 依赖 | 版本要求 | 本机实测版本 | 获取方式 |
 |---|---|---|---|
-| Go | **1.25+**（`go.mod` 为准） | 1.27.0 | https://go.dev/dl/ |
+| Go | **1.26+**（`go.mod` 为准，1.26 起因为 chromedp） | 1.27.0 | https://go.dev/dl/ |
 | C 编译器 | 支持 CGO 即可 | MSYS2 gcc 16.2.0 | MSYS2 / MinGW-w64 |
 | Python | **3.10+** | 3.12.3 | https://www.python.org/downloads/ |
 | Git | 任意较新版本 | 2.47.1 | https://git-scm.com/ |

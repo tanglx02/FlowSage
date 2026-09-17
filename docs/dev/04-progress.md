@@ -25,6 +25,49 @@
 
 ---
 
+### 2026-09-18 — MVP-1 完成：浏览器托管 + 会话接管
+
+**状态**：已完成（失效检测留到 MVP-2）
+
+**做了什么**
+
+- 引入 `github.com/chromedp/chromedp v0.16.0`（连带把 `go.mod` 的 Go 版本从 1.25.0 抬到 **1.26**，已按约定给 go.mod 加修改标注）
+- 新增 `internal/browser/`：
+  - 浏览器探测（Chrome → Edge → 便携版），覆盖 Windows / Linux / macOS
+  - 独立实例管理：`--user-data-dir=tmp/browser/profile`，不影响日常浏览器、登录态跨重启保留
+  - 进程脱离：Windows 先试 `CREATE_BREAKAWAY_FROM_JOB` 失败降级，Unix 用 `Setsid`；状态存 `tmp/browser/state.json`
+  - CDP Cookie 提取（`Network.getCookies`），附最早过期时间计算
+- 新增 `cmd/flowsage/` CLI：`browser list | open | status | cookie | close`
+- 新增 alertctl 适配器：`--export-alertctl` 原地改写 `config.toml` 的 cookie 行，自动备份、保留 BOM
+
+**涉及文件**
+
+- `internal/browser/{browser,instance,cookie,detach_windows,detach_unix}.go` — 新增
+- `cmd/flowsage/{main,browser,alertctl}.go` — 新增
+- `go.mod` / `go.sum` — 新增依赖（带修改标注）
+- `.gitignore` — 追加 `/flowsage`、`/flowsage.exe`
+- `AGENTS.md`、`docs/dev/{01-environment,06-design}.md` — 同步命令、Go 版本、MVP 状态
+
+**验证方式**
+
+- `go build -o flowsage.exe ./cmd/flowsage` → 成功
+- `flowsage browser list` → 正确探测到 Chrome（用户在 `%LOCALAPPDATA%` 的安装）与 Edge，Chrome 优先
+- `flowsage browser open https://www.baidu.com` → 独立 profile 启动，调试端口就绪
+- `flowsage browser cookie --url https://www.baidu.com` → **读到 8 条真实 Cookie**（含域名、过期时间），单行 Cookie 头生成正确
+- `--export-alertctl <config.toml 副本>` → 第 12 行 cookie 被正确替换，其余行未动，`.bak` 已生成
+
+**遗留 / 下一步**
+
+- ⚠️ **两道待你在本机确认**：
+  1. **浏览器脱离 CLI 存活**：在普通终端执行 `flowsage browser open <url>`，退出命令行后确认浏览器仍在。
+     本次自动化验证环境把整条命令树放在 kill-on-close 的 Job 里，子进程一律被连带清理
+     （早先用纯 PowerShell `Start-Process` 启动服务时现象相同），故无法在此环境验证。
+  2. **企业策略是否禁用 CDP**：内网机器上确认 `--remote-debugging-port` 不被拦截。
+- 会话失效检测（定期探测 `sysUser/me` 之类轻量接口后告警）留到 MVP-2 一并做
+- 下一步：MVP-2 流量观测（CDP Network 全量捕获 → 落库 → 导出 HAR）
+
+---
+
 ### 2026-09-18 — 确定二开方向，产出设计说明（尚未写代码）
 
 **状态**：已完成

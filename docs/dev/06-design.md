@@ -110,14 +110,25 @@
 
 ## 6. 分阶段实施
 
-| 阶段 | 交付 | 验收标准 |
-|---|---|---|
-| **MVP-1** 浏览器托管 + 会话接管 | `flowsage browser open <url>`：独立 profile 启动、人工登录、自动提取 Cookie、失效检测 | 能完全替代"手工从浏览器复制 Cookie 粘进 config.toml"，并把 Cookie 直接喂给现有 alertctl |
-| **MVP-2** 流量观测 | 全量捕获 + 落库 + `flowsage traffic export --har out.har` | 走一遍登录+处置流程，导出的 HAR 与人工从 DevTools 导出的等价 |
-| **MVP-3** 页面操控 + Agent 化 | 定位/点击/输入/等待/截图/JS，并注册为 MCP 工具 | Agent 能自主完成"打开告警列表 → 翻页 → 截图 → 返回结构化结果" |
-| **MVP-4** 接口理解 + 端到端处置 | LLM 接口清单生成；桥接规则引擎；列告警→话术→附件→提交 | 跑通今日未处置告警的完整处置链路，且话术与 alertctl 现有口径逐字一致 |
+| 阶段 | 交付 | 验收标准 | 状态 |
+|---|---|---|---|
+| **MVP-1** 浏览器托管 + 会话接管 | `flowsage browser` 系列命令：独立 profile 启动、人工登录、自动提取 Cookie、状态查询与关闭 | 能完全替代"手工从浏览器复制 Cookie 粘进 config.toml" | ✅ **已完成**（2026-09-18，失效检测待补） |
+| **MVP-2** 流量观测 | 全量捕获 + 落库 + `flowsage traffic export --har out.har` | 走一遍登录+处置流程，导出的 HAR 与人工从 DevTools 导出的等价 | 待开发 |
+| **MVP-3** 页面操控 + Agent 化 | 定位/点击/输入/等待/截图/JS，并注册为 MCP 工具 | Agent 能自主完成"打开告警列表 → 翻页 → 截图 → 返回结构化结果" | 待开发 |
+| **MVP-4** 接口理解 + 端到端处置 | LLM 接口清单生成；桥接规则引擎；列告警→话术→附件→提交 | 跑通今日未处置告警的完整处置链路，且话术与 alertctl 现有口径逐字一致 | 待开发 |
 
 每个阶段独立可交付，前一个阶段的产物不阻塞后续。
+
+### MVP-1 实现说明
+
+| 项 | 落地 |
+|---|---|
+| 命令 | `cmd/flowsage/`（`browser list/open/status/cookie/close`） |
+| 模块 | `internal/browser/`：探测、实例管理、CDP Cookie 提取 |
+| 独立实例 | `--user-data-dir=<工作根>/tmp/browser/profile`，不影响日常浏览器且登录态跨重启保留 |
+| 进程脱离 | Windows 先试 `CREATE_BREAKAWAY_FROM_JOB`，不允许时降级；Unix 用 `Setsid` |
+| 状态持久化 | `tmp/browser/state.json`（`tmp/` 已被上游 gitignore 忽略） |
+| alertctl 适配 | `--export-alertctl` 原地改写 `config.toml` 的 cookie 行，自动备份、保留 BOM |
 
 ## 7. 技术选型
 

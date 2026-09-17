@@ -1,0 +1,412 @@
+/* FlowSage 流量分析页样式（依赖 style.css 的主题变量） */
+
+.traffic-layout {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    min-height: 0;
+}
+
+/* 左侧：接口清单列表 */
+.traffic-sidebar {
+    flex: 0 0 268px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--card-bg);
+    overflow: hidden;
+}
+
+.traffic-sidebar-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+#traffic-list-count {
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.traffic-list {
+    max-height: 620px;
+    overflow-y: auto;
+}
+
+.traffic-item {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.traffic-item:hover {
+    background: var(--bg-secondary);
+}
+
+.traffic-item.is-active {
+    background: var(--bg-tertiary);
+    box-shadow: inset 3px 0 0 var(--accent-color);
+}
+
+.traffic-item-name {
+    font-size: 13px;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.traffic-item-host {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.traffic-item-meta {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* 右侧：详情 */
+.traffic-main {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.traffic-placeholder {
+    padding: 48px 24px;
+    border: 1px dashed var(--border-color);
+    border-radius: 10px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+    line-height: 1.9;
+    background: var(--card-bg);
+}
+
+.traffic-upload-status {
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.traffic-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.traffic-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.traffic-detail-title {
+    margin: 0 0 6px;
+    font-size: 16px;
+    color: var(--text-primary);
+}
+
+.traffic-detail-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.traffic-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.traffic-chip {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.traffic-chip-accent {
+    background: rgba(0, 102, 255, 0.12);
+    color: var(--accent-color);
+}
+
+.traffic-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+}
+
+.traffic-card {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--card-bg);
+    padding: 12px 14px;
+}
+
+.traffic-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.traffic-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.traffic-kv {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+.traffic-kv span {
+    color: var(--text-secondary);
+}
+
+.traffic-kv b {
+    color: var(--text-primary);
+    font-weight: 500;
+    text-align: right;
+    word-break: break-all;
+}
+
+.traffic-muted {
+    color: var(--text-muted);
+}
+
+/* 模块过滤 + 接口表 */
+.traffic-module-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.traffic-module-btn {
+    padding: 4px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: var(--card-bg);
+    color: var(--text-secondary);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.traffic-module-btn:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.traffic-module-btn.is-active {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #fff;
+}
+
+.traffic-table-wrap {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--card-bg);
+    overflow: hidden;
+}
+
+.traffic-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.traffic-table thead th {
+    text-align: left;
+    padding: 8px 12px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.traffic-table td {
+    padding: 7px 12px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+    vertical-align: top;
+}
+
+.traffic-row {
+    cursor: pointer;
+}
+
+.traffic-row:hover {
+    background: var(--bg-secondary);
+}
+
+.traffic-row.is-active {
+    background: var(--bg-tertiary);
+}
+
+.traffic-path {
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    word-break: break-all;
+}
+
+.traffic-method {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.traffic-method-get { background: rgba(40, 167, 69, 0.15); color: var(--success-color); }
+.traffic-method-post { background: rgba(0, 102, 255, 0.15); color: var(--accent-color); }
+.traffic-method-put,
+.traffic-method-patch { background: rgba(255, 193, 7, 0.18); color: #b8860b; }
+.traffic-method-delete { background: rgba(220, 53, 69, 0.15); color: var(--error-color); }
+
+.traffic-tag {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 0 6px;
+    border-radius: 4px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    font-size: 11px;
+}
+
+.traffic-tag-required {
+    background: rgba(220, 53, 69, 0.12);
+    color: var(--error-color);
+}
+
+/* 接口详情 */
+.traffic-endpoint-detail {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--card-bg);
+    padding: 14px;
+}
+
+.traffic-endpoint-detail:empty {
+    display: none;
+}
+
+.traffic-sub-title {
+    margin: 14px 0 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.traffic-sub-title:first-child {
+    margin-top: 0;
+}
+
+.traffic-endpoint-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.traffic-endpoint-head code {
+    font-size: 13px;
+    color: var(--text-primary);
+    word-break: break-all;
+}
+
+.traffic-schema {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px 10px;
+    max-height: 380px;
+    overflow: auto;
+    background: var(--bg-secondary);
+}
+
+.traffic-field {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 3px 0;
+    font-size: 12px;
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.traffic-field:last-child {
+    border-bottom: none;
+}
+
+.traffic-field-items {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.traffic-field-name {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.traffic-field-type {
+    color: var(--accent-color);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.traffic-field-sample {
+    color: var(--text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 320px;
+}
+
+.traffic-empty {
+    padding: 24px 14px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.traffic-file-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}
+
+@media (max-width: 1100px) {
+    .traffic-layout {
+        flex-direction: column;
+    }
+
+    .traffic-sidebar {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+}

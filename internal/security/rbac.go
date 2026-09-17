@@ -1,3 +1,5 @@
+// Modified by FlowSage: 新增 traffic 权限（流量接入与接口清单）。
+
 package security
 
 import (
@@ -78,6 +80,9 @@ var PermissionCatalog = map[string]string{
 	"attackchain:write":    "Regenerate attack chains",
 	"fofa:execute":         "Run FOFA searches and query parsing",
 	"openapi:read":         "Read OpenAPI aggregation results",
+	"traffic:read":         "View captured traffic and API inventories",
+	"traffic:write":        "Upload traffic captures and run API analysis",
+	"traffic:delete":       "Delete API inventories",
 	"group:read":           "View conversation groups",
 	"group:write":          "Create and update conversation groups",
 	"group:delete":         "Delete conversation groups",

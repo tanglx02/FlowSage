@@ -1,3 +1,5 @@
+// Modified by FlowSage: 新增 api_inventories 表（流量分析产出的接口清单）。
+
 package database
 
 import (
@@ -410,6 +412,23 @@ func (db *DB) initTables() error {
 		updated_at DATETIME NOT NULL,
 		FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
 		UNIQUE(project_id, source_fact_key, target_fact_key, edge_type)
+	);`
+
+	// FlowSage：流量分析产出的接口清单（payload 存 apianalyze.Inventory 的 JSON）
+	createAPIInventoriesTable := `
+	CREATE TABLE IF NOT EXISTS api_inventories (
+		id TEXT PRIMARY KEY,
+		project_id TEXT,
+		name TEXT NOT NULL,
+		source TEXT NOT NULL DEFAULT 'har',
+		host TEXT,
+		record_count INTEGER NOT NULL DEFAULT 0,
+		api_count INTEGER NOT NULL DEFAULT 0,
+		endpoint_count INTEGER NOT NULL DEFAULT 0,
+		payload TEXT,
+		owner_user_id TEXT,
+		created_at DATETIME NOT NULL,
+		updated_at DATETIME NOT NULL
 	);`
 
 	// 创建漏洞表
@@ -888,6 +907,10 @@ func (db *DB) initTables() error {
 
 	if _, err := db.Exec(createProjectFactEdgesTable); err != nil {
 		return fmt.Errorf("创建project_fact_edges表失败: %w", err)
+	}
+
+	if _, err := db.Exec(createAPIInventoriesTable); err != nil {
+		return fmt.Errorf("创建api_inventories表失败: %w", err)
 	}
 
 	if _, err := db.Exec(createVulnerabilitiesTable); err != nil {

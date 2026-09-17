@@ -1,3 +1,5 @@
+// Modified by FlowSage: 注册流量接入与接口清单路由（/api/traffic）。
+
 package app
 
 import (
@@ -398,6 +400,7 @@ func New(cfg *config.Config, log *logger.Logger, configPath string) (*App, error
 	vulnerabilityHandler := handler.NewVulnerabilityHandler(db, log.Logger)
 	assetHandler := handler.NewAssetHandler(db, log.Logger)
 	projectHandler := handler.NewProjectHandler(db, log.Logger)
+	trafficHandler := handler.NewTrafficHandler(db, log.Logger)
 	rbacHandler := handler.NewRBACHandler(db, log.Logger)
 	rbacHandler.SetAudit(auditSvc)
 	rbacHandler.SetAuthManager(authManager)
@@ -575,6 +578,7 @@ func New(cfg *config.Config, log *logger.Logger, configPath string) (*App, error
 		vulnerabilityHandler,
 		assetHandler,
 		projectHandler,
+		trafficHandler,
 		workflowHandler,
 		webshellHandler,
 		chatUploadsHandler,
@@ -878,6 +882,7 @@ func setupRoutes(
 	vulnerabilityHandler *handler.VulnerabilityHandler,
 	assetHandler *handler.AssetHandler,
 	projectHandler *handler.ProjectHandler,
+	trafficHandler *handler.TrafficHandler,
 	workflowHandler *handler.WorkflowHandler,
 	webshellHandler *handler.WebShellHandler,
 	chatUploadsHandler *handler.ChatUploadsHandler,
@@ -1279,6 +1284,12 @@ func setupRoutes(
 		protected.DELETE("/projects/:id/facts/:factId", projectHandler.DeleteFact)
 		protected.POST("/projects/:id/facts/deprecate", projectHandler.DeprecateFact)
 		protected.POST("/projects/:id/facts/restore", projectHandler.RestoreFact)
+
+		// FlowSage 流量接入与接口清单（F3）：HAR 导入 → 归一化 → 接口分析 → 落库
+		protected.POST("/traffic/har", trafficHandler.UploadHAR)
+		protected.GET("/traffic/inventories", trafficHandler.ListInventories)
+		protected.GET("/traffic/inventories/:id", trafficHandler.GetInventory)
+		protected.DELETE("/traffic/inventories/:id", trafficHandler.DeleteInventory)
 
 		// WebShell 管理（代理执行 + 连接配置存 SQLite）
 		protected.GET("/webshell/connections", webshellHandler.ListConnections)

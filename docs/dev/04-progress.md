@@ -25,6 +25,48 @@
 
 ---
 
+### 2026-09-18 — P1 收口：Web 控制台「流量分析」页（HAR 导入 → 接口清单）
+
+**状态**：已完成，服务已在本机 8080 端口跑起来
+
+**做了什么**
+
+- **DB**：新增 `api_inventories` 表（`CREATE TABLE IF NOT EXISTS`，含 host / 记录数 / 接口数 / payload JSON / 归属用户）与 `internal/database/traffic.go` 的四个访问方法
+- **Handler**：新增 `internal/handler/traffic.go`
+  - `POST /api/traffic/har`：上传 → `trafficparse.ParseHAR` → `apianalyze.Analyze` → 落库 → 返回完整分析结果（上限 128 MB）
+  - `GET /api/traffic/inventories`（按项目过滤 + 分页，**不返回 payload**）
+  - `GET /api/traffic/inventories/:id`（返回完整分析结果）
+  - `DELETE /api/traffic/inventories/:id`
+  - 归属校验：全局范围可见全部，其余只能看到/删除自己的清单
+- **RBAC**：`PermissionCatalog` 新增 `traffic:read` / `traffic:write` / `traffic:delete`，并在 `permissionForRequest` 里映射 `/api/traffic`（不加映射会被拦截为"未配置访问权限"403）
+- **前端**（纯静态，无构建）：新增导航「流量分析」+ 页面 + `web/static/js/traffic.js` + `web/static/css/traffic.css`
+  - 左侧清单列表、右侧详情：统一外壳卡片、鉴权与固定头卡片、按模块过滤的接口表、接口详情（查询参数、请求/响应字段树、分页）、导出 JSON、删除
+
+**涉及文件**
+
+- `internal/database/{traffic.go,database.go}` — 新增表与访问方法
+- `internal/handler/{traffic.go,traffic_test.go}` — 新增
+- `internal/app/app.go` — 注册 `/api/traffic` 路由
+- `internal/security/{rbac.go,rbac_middleware.go}` — 新增权限与路由映射
+- `web/templates/index.html`、`web/static/js/{router.js,traffic.js}`、`web/static/css/traffic.css` — 前端
+- `docs/dev/06-design.md` — P0/P1 状态更新
+
+**验证方式**
+
+- `go build ./...` 通过；`go test ./internal/handler/ -run TestTraffic` 2 个用例通过
+  （覆盖：静态资源过滤、端点归并、路径参数泛化、外壳识别 `code == 200`、分页识别、越权拒绝、删除后 404）
+- `go test ./internal/security/...` 中 `TestEveryProtectedRouteHasCatalogPermission` 通过（新路由都有目录内权限）
+- 真实 HAR 回归：`flowsage analyze 192.169.20.251.har` → 286 条 → 49 条候选 → **19 个接口**，外壳 19/19，`x-bff-mode: true`
+- 服务实测：`run-windows.cmd --http` 启动，`GET /` 200、新页面静态资源 200、导航含入口、`/api/traffic/inventories` 未带 token 返回 401
+
+**遗留 / 下一步**
+
+- 清单暂未支持人工编辑/确认（设计里 P1 提到"可看可编辑"，编辑留到 P2 之前补）
+- 上传时未绑定项目（页面暂无项目下拉），`project_id` 目前靠接口预留
+- **P2 起点**：接口清单 → 生成 Python CLI 客户端（以 alertctl 为模板），另建议先补扩展/CDP 通道把流量来源补齐
+
+---
+
 ### 2026-09-18 — P1 核心：流量解析 + API 分析引擎（已用真实 HAR 验证）
 
 **状态**：引擎完成并验证；Web 层待接

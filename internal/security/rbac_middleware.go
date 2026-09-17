@@ -1,3 +1,5 @@
+// Modified by FlowSage: 为 /api/traffic 路由映射权限。
+
 package security
 
 import (
@@ -185,6 +187,8 @@ func permissionForRequest(method, fullPath string) string {
 		return crudPermission(method, "skills")
 	case strings.HasPrefix(path, "/openapi"):
 		return "openapi:read"
+	case strings.HasPrefix(path, "/traffic"):
+		return crudPermission(method, "traffic")
 	case strings.HasPrefix(path, "/fofa"):
 		return "fofa:execute"
 	default:

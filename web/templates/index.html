@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="/static/css/style.css?v=20260819-4">
     <link rel="stylesheet" href="/static/css/chat-plan-progress.css?v=20260813-4">
     <link rel="stylesheet" href="/static/css/c2.css">
+    <link rel="stylesheet" href="/static/css/traffic.css">
     <link rel="stylesheet" href="/static/vendor/xterm.css">
     <script src="/static/js/router.js?v=20260819-3"></script>
 </head>
@@ -231,6 +232,15 @@
                                 <path d="M10 18h9"></path>
                             </svg>
                             <span data-i18n="nav.projects">项目管理</span>
+                        </div>
+                    </div>
+                    <div class="nav-item" data-page="traffic" data-require-permission="traffic:read">
+                        <div class="nav-item-content" data-title="流量分析" onclick="switchPage('traffic')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 17l5-6 4 3 5-8 4 4"></path>
+                                <path d="M3 21h18"></path>
+                            </svg>
+                            <span>流量分析</span>
                         </div>
                     </div>
                     <div class="nav-item nav-item-has-submenu" data-page="assets" data-require-permission-any="asset:read fofa:execute">
@@ -2604,6 +2614,34 @@
                                     </footer>
                                 </div>
                             </div>
+                        </main>
+                    </div>
+                </div>
+                <!-- FlowSage 流量分析页面（HAR 导入 → 接口清单） -->
+                <div id="page-traffic" class="page">
+                    <div class="page-header">
+                        <h2>流量分析</h2>
+                        <div class="page-header-actions">
+                            <input type="file" id="traffic-har-input" class="traffic-file-input" accept=".har,application/json" onchange="uploadTrafficHAR(this)">
+                            <label class="btn-primary" for="traffic-har-input" data-require-permission="traffic:write">导入 HAR</label>
+                            <button class="btn-secondary" type="button" onclick="loadTrafficInventories()">刷新</button>
+                        </div>
+                    </div>
+                    <div class="page-content traffic-layout">
+                        <aside class="traffic-sidebar">
+                            <div class="traffic-sidebar-head">
+                                <span>接口清单</span>
+                                <span id="traffic-list-count">0</span>
+                            </div>
+                            <div id="traffic-list" class="traffic-list"></div>
+                        </aside>
+                        <main class="traffic-main">
+                            <div id="traffic-upload-status" class="traffic-upload-status" hidden></div>
+                            <div id="traffic-placeholder" class="traffic-placeholder">
+                                在浏览器 DevTools 的 Network 面板导出 .har 文件，点右上角「导入 HAR」。<br>
+                                FlowSage 会自动过滤静态资源、归纳接口、推断请求与响应结构。
+                            </div>
+                            <div id="traffic-detail" class="traffic-detail" hidden></div>
                         </main>
                     </div>
                 </div>
@@ -6869,6 +6907,7 @@
     <script src="/static/js/skills.js"></script>
     <script src="/static/js/fact-graph.js"></script>
     <script src="/static/js/projects.js?v=20260819-1"></script>
+    <script src="/static/js/traffic.js"></script>
     <script src="/static/js/vulnerability.js?v=14"></script>
     <script src="/static/js/webshell.js"></script>
     <script src="/static/js/chat-files.js"></script>

@@ -8,6 +8,7 @@
 |---|---|
 | 刚 clone 下来，要跑起来 | [01-environment.md](01-environment.md) |
 | **想知道这项目要做什么、怎么做** | **[06-design.md](06-design.md)** |
+| **要下载便携浏览器** | **[07-portable-browser.md](07-portable-browser.md)** |
 | 要改代码，先搞清结构 | [02-architecture.md](02-architecture.md) |
 | 准备动手，别踩规矩 | [03-conventions.md](03-conventions.md) |
 | 不知道上一步做到哪了 | [04-progress.md](04-progress.md) |
@@ -15,8 +16,9 @@
 
 AI 工具请先读仓库根目录的 [`AGENTS.md`](../../AGENTS.md)，它是所有入口的汇总。
 
-## 领域参考项目
+## 领域参考项目（首个落地场景）
 
+FlowSage 是**通用能力层**，不绑定单一系统。首个场景的参考实现在
 `D:\project\python\态势感知告警处理`（Python 版 `alertctl`）：
 
 - `技术功能实现文档.md` —— 站点接口契约、智能处置规则、终端兼容性结论，**需求细节都在这里**

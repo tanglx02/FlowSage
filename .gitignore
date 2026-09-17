@@ -65,3 +65,8 @@ Thumbs.db
 desktop.ini
 .idea/
 .vscode/
+
+# Modified by FlowSage: FlowSage-specific runtime artifacts.
+
+# FlowSage runtime artifacts
+/browser/

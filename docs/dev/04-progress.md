@@ -36,13 +36,17 @@
 - 与用户敲定四项关键决策（技术栈、运行环境、话术来源、能力范围），全部记入 ADR-009 ~ ADR-013
 - 产出 [`06-design.md`](06-design.md)：能力清单、架构图、规则引擎集成契约、MVP-1~4 分阶段计划、风险与待明确项
 - 环境探测结论：本机无 Chrome，**有 Edge 153**（Chromium 内核，CDP 可用）；Go 模块缓存中尚无浏览器自动化库
+- 补充 [`07-portable-browser.md`](07-portable-browser.md)：三来源（官方 Chromium 快照 / Chrome for Testing / npmmirror 国内镜像）的**分系统下载地址全部实测通过**，含自检步骤与常见问题
+- 按用户澄清修正定位：**FlowSage 是通用能力层**，态势感知告警处置只是首个落地场景，不是项目边界
 
 **涉及文件**
 
 - `docs/dev/06-design.md` — 新增，需求与架构的单一来源
+- `docs/dev/07-portable-browser.md` — 新增，便携浏览器下载与自检
 - `docs/dev/05-decisions.md` — 新增 ADR-009 ~ ADR-013
 - `AGENTS.md` — 更新项目定位与文档索引，补充领域参考项目说明
-- `docs/dev/README.md` — 索引补充设计说明
+- `docs/dev/README.md` — 索引补充设计说明与浏览器下载
+- `.gitignore` — 新增 `/browser/`（按约定带 `Modified by FlowSage` 标注）
 
 **验证方式**
 

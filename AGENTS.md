@@ -93,6 +93,7 @@ run-windows.cmd --http                         # 纯 HTTP 启动（避免自签�
 |---|---|
 | [docs/dev/README.md](docs/dev/README.md) | 文档体系导航与使用方式 |
 | [docs/dev/06-design.md](docs/dev/06-design.md) | **项目设计说明**：定位、能力清单、架构、分阶段实施、风险 |
+| [docs/dev/07-portable-browser.md](docs/dev/07-portable-browser.md) | 便携浏览器下载（分系统地址已实测）+ 自检步骤 |
 | [docs/dev/01-environment.md](docs/dev/01-environment.md) | 环境搭建、迁移到新机器的完整步骤、已知环境坑 |
 | [docs/dev/02-architecture.md](docs/dev/02-architecture.md) | 上游架构地图、关键文件与调用链、扩展点 |
 | [docs/dev/03-conventions.md](docs/dev/03-conventions.md) | 二开约定：分支模型、上游同步、许可证合规、测试 |
@@ -100,5 +101,8 @@ run-windows.cmd --http                         # 纯 HTTP 启动（避免自签�
 | [docs/dev/05-decisions.md](docs/dev/05-decisions.md) | 决策记录（ADR） |
 | `docs/zh-CN/`、`docs/en-US/` | **上游原生文档**（架构、配置、部署、测试等 30+ 篇），不要改动 |
 
-> 外部参考：`D:\project\python\态势感知告警处理` 是**领域参考项目**（Python 版 `alertctl`，
-> 含已验证的处置规则引擎与站点接口契约）。它的 `smart.py` 是资产，本项目复用而非重写。
+> **FlowSage 是通用能力层，不绑定单一系统。** 目标是任何"要登录 + 要看流量 + 要重复操作"的 Web 系统。
+>
+> 外部参考：`D:\project\python\态势感知告警处理` 是**首个落地场景**的领域参考项目
+> （Python 版 `alertctl`，含已验证的处置规则引擎与站点接口契约）。
+> 它的 `smart.py` 是资产，本项目复用而非重写；换系统时只替换领域规则与接口清单。

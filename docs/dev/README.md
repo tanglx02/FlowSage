@@ -7,12 +7,23 @@
 | 你的处境 | 先读 |
 |---|---|
 | 刚 clone 下来，要跑起来 | [01-environment.md](01-environment.md) |
+| **想知道这项目要做什么、怎么做** | **[06-design.md](06-design.md)** |
 | 要改代码，先搞清结构 | [02-architecture.md](02-architecture.md) |
 | 准备动手，别踩规矩 | [03-conventions.md](03-conventions.md) |
 | 不知道上一步做到哪了 | [04-progress.md](04-progress.md) |
 | 想改某个设计，先看有没有定过 | [05-decisions.md](05-decisions.md) |
 
 AI 工具请先读仓库根目录的 [`AGENTS.md`](../../AGENTS.md)，它是所有入口的汇总。
+
+## 领域参考项目
+
+`D:\project\python\态势感知告警处理`（Python 版 `alertctl`）：
+
+- `技术功能实现文档.md` —— 站点接口契约、智能处置规则、终端兼容性结论，**需求细节都在这里**
+- `.trae/skills/tsgz-alert-cli/` —— 该项目的项目级 skill
+- `二区/`、`三区/alertctl/smart.py` —— **已验证的处置规则引擎，本项目复用不重写**
+
+该项目与 FlowSage 是**协作关系**：它提供领域逻辑与既有资产，FlowSage 提供浏览器与 Agent 能力。
 
 ## 与上游文档的关系
 

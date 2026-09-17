@@ -5,7 +5,19 @@ description: Work inside the FlowSage repo, a CyberStrikeAI derivative. Use when
 
 # FlowSage 开发
 
-FlowSage 是基于 CyberStrikeAI v1.7.17 的二开项目，目标是"浏览器 Web 流量抓包 + CLI 交互式安全测试 Agent"。
+FlowSage 是基于 CyberStrikeAI v1.7.17 的二开项目，定位是**由浏览器驱动的安全运营 Agent**：
+托管独立浏览器、接管会话、观测流量、Selenium 级页面操控，并把学到的接口用于实际作业
+（当前场景：态势感知告警的批量处置）。
+
+**开工前务必读 `docs/dev/06-design.md`**（需求与架构的单一来源）与 `D:\project\python\态势感知告警处理\技术功能实现文档.md`（领域需求细节）。
+
+## 领域约束（容易踩）
+
+- **不重写 `alertctl/smart.py` 的处置规则**：它经 5832 条历史台账验证，口径由用户逐类确认；
+  本项目只通过稳定 JSON 契约复用它（见 ADR-012）
+- **话术规则优先 + LLM 只兜底未知类型**，LLM 产出必须标"待确认"，不得直接提交
+- **不做自动登录**：登录必须过图形验证码，人工在浏览器窗口完成
+- 框架类（纵向加密）与需人工类（隔离装置、防火墙、态势感知第③档）**不得直接提交**
 
 ## 开工前必做
 

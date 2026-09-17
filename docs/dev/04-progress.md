@@ -41,6 +41,8 @@
 - 服务实测启动成功：登录成功、138 个工具全部加载
 - 目录扁平化：`CyberStrikeAI-1.7.17\CyberStrikeAI-1.7.17\` → `FlowSage\`
 - git 初始化：上游纯净基线 `3df1aff` + `upstream` remote
+- 安装 `gh` CLI（2.101.0）并完成 GitHub 授权（账号 `tanglx02`），配置 git 凭据助手
+- **创建公开仓库并推送**：https://github.com/tanglx02/FlowSage （默认分支 `main`）
 - 建立文档体系（本目录）与项目级 skill 包（`.trae/skills/flowsage-dev/`）
 
 **涉及文件**
@@ -50,6 +52,8 @@
 - `AGENTS.md` — 新增，AI 协作事实源
 - `docs/dev/*` — 新增，开发文档体系
 - `.trae/skills/flowsage-dev/` — 新增，项目级 skill
+- `.trae/rules/`、`.cursor/rules/`、`CLAUDE.md` — 新增，各 AI IDE 薄入口
+- `NOTICE` — 新增，声明衍生作品与修改标注约定
 - `config.yaml` — 新建（已 gitignore，含 API Key）
 
 **验证方式**
@@ -58,9 +62,12 @@
 - 服务启动后 `POST /api/auth/login` → 登录成功
 - `GET /api/config/tools?page=1&page_size=100` → `total: 138`
 - `venv\Scripts\python3.exe -c "import requests, impacket"` → 正常
+- `scripts\setup-windows.cmd` → 幂等执行通过
+- `gh repo view tanglx02/FlowSage` → `PUBLIC`，两个提交均已推送
 
 **遗留 / 下一步**
 
 - 等待确定 FlowSage 的详细设计（浏览器抓包 + CLI 交互式 Agent）
 - 候选起点：`plugins/browser-extension/`（上游已有 DevTools 抓包扩展）、`cmd/`（新增 CLI 入口）
 - Windows 上 70+ 原生渗透工具缺失，若需本机跑通需另装或用 Kali 侧 MCP 联邦
+- 公开仓库尚无 README（当前用的是上游 README），需补一份说明"这是衍生项目 + 目标形态"的对外说明

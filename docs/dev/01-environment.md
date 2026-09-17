@@ -98,6 +98,23 @@ and will fallback to encoding/json
 `config.yaml` 含 API Key，已被 `.gitignore` 排除。迁移机器时**需要手动复制或重新填写**，
 不能靠 `git clone` 带过去。
 
+### 坑 6：直连 github.com 不稳定，需走代理
+
+本机实测直连 `github.com`（含 `gh` 的设备码授权轮询、`git push`）会出现
+`Connection was reset` / 连接超时。本机已有代理监听 `127.0.0.1:7890`，因此本仓库设置了**仓库级**代理：
+
+```bash
+git config --local http.proxy  http://127.0.0.1:7890
+git config --local https.proxy http://127.0.0.1:7890
+```
+
+注意：
+
+- 该配置写在 `.git/config`，**不随仓库分发**。换机器后若推送失败，按本机代理端口重新设置
+- 用 `gh` 命令时同时设置环境变量：`$env:HTTPS_PROXY="http://127.0.0.1:7890"`
+- 凭据已由 `gh auth setup-git` 接管（`credential.https://github.com.helper` 指向 `gh auth git-credential`），
+  换机器后需重新执行 `gh auth login` 再 `gh auth setup-git`
+
 ## 5. Linux / macOS
 
 上游的 `run.sh` 在这两个平台上可用（自动建 venv、装依赖、编译、启动）：

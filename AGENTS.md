@@ -11,7 +11,12 @@
 - **本项目目标形态**：**浏览器 Web 流量抓包 + CLI 交互式安全测试 Agent**
 
 上游快照以纯净基线形式保留在 commit `3df1aff`（994 个文件，未做任何改动），
-所有 FlowSage 的改动都叠加在其之上。`upstream` remote 指向原仓库，便于跟进上游版本。
+所有 FlowSage 的改动都叠加在其之上。
+
+| remote | 地址 | 用途 |
+|---|---|---|
+| `origin` | https://github.com/tanglx02/FlowSage.git | 本项目的公开仓库 |
+| `upstream` | https://github.com/Ed1s0nZ/CyberStrikeAI.git | 上游，用于跟进版本更新 |
 
 ## 许可证义务（改动前必读）
 

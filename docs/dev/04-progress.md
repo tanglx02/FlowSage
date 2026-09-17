@@ -25,6 +25,57 @@
 
 ---
 
+### 2026-09-18 — P1 核心：流量解析 + API 分析引擎（已用真实 HAR 验证）
+
+**状态**：引擎完成并验证；Web 层待接
+
+**做了什么**
+
+- 新增 `internal/trafficparse`：HAR 1.2 解析、静态资源过滤、请求头归一化（剔除噪声头）、四种通道共用的归一化记录模型
+- 新增 `internal/apianalyze`：九步分析链——过滤 → 端点归并 → 路径参数泛化 → 请求结构 → 响应结构（**递归展开**）→ 统一外壳 → 分页模式 → 鉴权与必带头 → 分组
+- `cmd/flowsage` 新增 `analyze` 子命令（内部验证用），支持 `--json` 输出完整清单
+- 新增 6 个单测，守住三个曾出错的不变量：数值格式、外壳识别、外壳内的分页识别
+
+**真实数据验证结果**（`192.169.20.251.har`）
+
+| 项 | 结果 |
+|---|---|
+| 流量过滤 | 286 条 → 49 条接口候选（滤掉 237 条静态资源） |
+| 接口识别 | **19 个**（人工整理版只有 9 个） |
+| 统一外壳 | `{code, data, msg}`，成功判定 `code == 200`，覆盖率 **19/19** |
+| 业务必带头 | `x-bff-mode: true`（缺失会导致全部请求异常） |
+| 鉴权 | oauth2，取 token 路径 `/tsgz/oauth2/token` |
+| 分页 | `queryAdvPage` → `pageNo/pageSize` + `data.list/data.total` |
+| 嵌套结构 | `data.list[]` 元素展开出 **45 个字段**（告警记录的完整结构） |
+| 路径参数泛化 | `/alarms/4c4561...` → `/alarms/{id}` |
+
+**过程中修掉的 4 个 bug**
+
+1. `trimFloat` 对整数误用去尾零，把 `200` 变成 `2`、`150` 变成 `15`（影响所有数值字段）
+2. 外壳覆盖率把"字段数"当成"接口数"打印，显示成 3/19
+3. 分页只看请求侧，把共用查询模板的统计接口误判为分页接口
+4. 结构推断不递归，导致藏在 `data` 里的 `list/total` 完全看不到（分页因此全漏）
+
+**涉及文件**
+
+- `internal/trafficparse/{record,har}.go` — 新增
+- `internal/apianalyze/{analyze,endpoint,schema,analyze_test}.go` — 新增
+- `cmd/flowsage/{main,analyze}.go` — 新增 analyze 子命令
+
+**验证方式**
+
+- `go test ./internal/apianalyze/...` → 6 个用例全部通过
+- `go vet` 与 `go build ./...` → 通过
+- `flowsage analyze <真实 HAR>` → 输出与上表一致
+
+**遗留 / 下一步**
+
+- **Web 层**：HAR 上传接口 + 接口清单页面（产品交互面，用户要求不用命令行）
+- 清单落库（新增 `api_inventories` 表）与人工确认/编辑能力
+- P2：基于清单生成 Python CLI 客户端
+
+---
+
 ### 2026-09-18 — 定位二次校准：改为 Web 端「Web 应用 → Python 程序」工具，Skills 整体替换
 
 **状态**：P0 完成（文档 + skills）；P1 起待开发

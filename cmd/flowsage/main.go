@@ -50,6 +50,11 @@ func main() {
 			fmt.Fprintf(os.Stderr, "错误: %v\n", err)
 			os.Exit(1)
 		}
+	case "analyze":
+		if err := runAnalyze(args[1:]); err != nil {
+			fmt.Fprintf(os.Stderr, "错误: %v\n", err)
+			os.Exit(1)
+		}
 	default:
 		fmt.Fprintf(os.Stderr, "未知命令: %s\n\n", args[0])
 		fmt.Print(usage)

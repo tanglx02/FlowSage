@@ -1,0 +1,16 @@
+---
+description: FlowSage 项目规则（CyberStrikeAI 二开项目）
+globs:
+alwaysApply: true
+---
+
+本仓库的协作约定、架构地图与硬性约束以根目录 `AGENTS.md` 为唯一事实源，请先读它。
+
+要点：
+
+- CyberStrikeAI v1.7.17 的二次开发项目，目标是"浏览器 Web 流量抓包 + CLI 交互式安全测试 Agent"
+- 修改上游已有文件需在文件顶部加 `// Modified by FlowSage: <说明>`（Apache-2.0 §4b）
+- 不可改动：`3df1aff` 基线提交、`LICENSE`、`NOTICE`、`web/static/vendor/`
+- 不可提交：`config.yaml`、真实凭据与目标数据
+- 完成后更新 `docs/dev/04-progress.md`；构建验证 `go build -o cyberstrike-ai.exe ./cmd/server`
+- 详细文档见 `docs/dev/`

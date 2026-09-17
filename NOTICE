@@ -1,0 +1,25 @@
+FlowSage
+Copyright 2026 tanglx02
+
+This product is a derivative work of CyberStrikeAI
+(https://github.com/Ed1s0nZ/CyberStrikeAI), Copyright 2025 Ed1s0nZ,
+licensed under the Apache License, Version 2.0.
+
+The pristine upstream snapshot (CyberStrikeAI v1.7.17) is preserved as the
+repository's baseline commit so that upstream releases can be merged. All
+modifications made by this project are applied on top of that baseline.
+
+Files modified from upstream carry a prominent notice at the top of the file
+in the form:
+
+    Modified by FlowSage: <description of the change>
+
+as required by Section 4(b) of the Apache License, Version 2.0.
+
+This project is not affiliated with, endorsed by, or sponsored by the
+upstream author.
+
+---
+
+Use of this software is restricted to systems you own or are explicitly
+authorized to test.

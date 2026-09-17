@@ -8,7 +8,12 @@
 **FlowSage** 是基于 [CyberStrikeAI](https://github.com/Ed1s0nZ/CyberStrikeAI) v1.7.17 的二次开发项目。
 
 - **上游形态**：Web 控制台式的 AI 渗透测试平台（Go 单体 + gin + SQLite + 静态前端）
-- **本项目形态**：**由浏览器驱动的安全运营 Agent** —— 托管独立浏览器、接管会话、观测流量、Selenium 级页面操控，并把学到的接口用于实际作业（当前场景：态势感知告警的批量处置）
+- **本项目形态**：**Web 端的 AI Agent，把目标 Web 应用自动转换成可维护的 Python 程序**
+  - **F1** 流量 → 生成 Python CLI/TUI 客户端
+  - **F2** 浏览器操作 → 生成 Selenium 式自动化脚本
+  - **F3** API 分析 → 找出目标应用的所有接口
+
+  **操作全在 Web 控制台完成**，不要求用户敲命令行；渗透测试能力整体剥离。
 
 完整需求与架构见 [docs/dev/06-design.md](docs/dev/06-design.md)。
 
@@ -90,7 +95,9 @@ flowsage browser close                                   # 关闭实例（profil
 | `internal/workflow/`、`internal/hitl/` | 工作流引擎、人机协同审批 |
 | `internal/knowledge/`、`internal/database/` | RAG 知识库、SQLite 持久化 |
 | `tools/*.yaml` | 工具配方（改 YAML 即可加工具，支持热重载） |
-| `skills/`、`roles/`、`agents/` | 运行时由 Agent 加载的 Skill / 角色 / 子 Agent 定义 |
+| `skills/` | **运行时 Skill 库**（已整体替换为「Web 应用 → Python 程序」相关 skill，见其 README） |
+| `roles/`、`agents/` | 运行时角色与子 Agent 定义（**仍为上游渗透向内容，待替换**） |
+| `plugins/browser-extension/` | 浏览器扩展（DevTools 抓包回传，四种流量通道之一） |
 | `web/` | 纯静态前端，无构建步骤，改完刷新即生效 |
 
 ## 开发约定
